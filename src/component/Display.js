@@ -1,9 +1,11 @@
 import React,{Component} from "react";
- 
-export default class Display extends Component {
-   render(){
-    return(
-        <div>Display</div>
-    )
+ import IpodScreens from '../constants';
+ import CoreMenu from "./screens/CoreMenu";
+export default function Display({curruntScreenIndex}) {
+   if(curruntScreenIndex === 1){
+    return <CoreMenu />;
+   }
+   else{
+    return <div>No Screen</div>
    }
 } 
