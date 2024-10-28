@@ -3,13 +3,16 @@ import zingtouch from "zingtouch";
 import Display from "./Display";
 import Controller from "./Controller";
 import { screenIndexMapping } from "../constants";
+import songs from '../assets/audio/audio';
 export default class Ipod extends Component{
     constructor(){
         super();
         this.state = {
           curruntScreenIndex : 1,
           menuActiveIndex : 0,
-          dormantScreenIndex : 1
+          dormantScreenIndex : 1,
+          curruntSong : new Audio(songs.audio1),
+          isSongPlaying: false,
         }
         this.controllerRef = React.createRef();
         this.tempMenuIndexStore = React.createRef();
@@ -82,6 +85,20 @@ export default class Ipod extends Component{
         })
       }
     }
+    handlePlayPause = () => {
+      if(this.state.isSongPlaying){
+        this.state.curruntSong.pause();
+        this.setState({isSongPlaying: false})
+      }
+      else {
+        this.state.curruntSong.play();
+        this.setState({isSongPlaying:true});
+      }
+    }
+    handlePlayPauseIcon =()=>{
+      if(this.state.isSongPlaying) return true;
+      else return false;
+    }
     render(){
         return(
            <div className="Ipod">
@@ -97,6 +114,8 @@ export default class Ipod extends Component{
                   rotate = {this.rotate}
                   centreTap = {this.centreTap}
                   handleMenuControllerClick = {this.handleMenuControllerClick}
+                  handlePlayPause = {this.handlePlayPause}
+                  isSongPlaying = {this.handlePlayPauseIcon}
                 />
               </div>
            </div>

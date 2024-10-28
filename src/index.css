@@ -55,6 +55,7 @@ body{
   grid-area: 1/2/2/3;
 }
 .forward {
+  
   grid-area: 2/3/3/4;
 }
 .backward {
@@ -64,13 +65,20 @@ body{
   grid-area: 3/2/4/3;
 }
 .controller-centre {
+  cursor: pointer;
   grid-area: 2/2/3/3;
   background-color: gray;
   height: 100%;
   width: 100%;
   border-radius: 50%;
 }
-
+.hover {
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(244, 250, 212);
+    border-radius: 70%;
+  }
+}
 
 /* Screen */
 
@@ -100,4 +108,5 @@ body{
 .menuTitle {
   height: 20%;
   /* color: rgb(42, 133, 225); */
+  
 }

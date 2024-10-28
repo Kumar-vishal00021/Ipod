@@ -4,7 +4,7 @@ export default function Menu({mainMenuOptions,title , menuActiveIndex}) {
   const activeMenuIndex =(index)=>{
 
     if(menuActiveIndex === index){
-      return {backgroundColor: 'rgb(42, 133, 225)',color:"white",borderRadius:"5px"};
+      return {backgroundColor: 'rgb(42, 133, 225)',color:"white",borderRadius:"5px",};
     }
   }
     return(
