@@ -15,18 +15,24 @@ export default class Controller extends Component{
         <div 
            className='controller'
            ref={this.props.controllerRef}
-           onMouseMove={(e)=>{
+           onMouseDown={(e)=>{
             e.stopPropagation();
             this.props.rotate();
             return;
            }}
         >
             <div
-             className='controller-menu hover'
-             onClick={this.props.handleMenuControllerClick}
-            >Menu</div>
-            <div className='forward hover'> <i className="fa fa-forward" /> </div>
-            <div className='backward hover' ><i className="fa fa-backward" /></div>
+              className='controller-menu hover'
+              onClick={this.props.handleMenuControllerClick}> Menu
+            </div>
+            <div 
+              className='forward hover' onClick={this.props.handleNextSong}>  
+              <i className="fa fa-forward" /> 
+            </div>
+            <div
+               className='backward hover' onClick={this.props.handlePrevSong}>
+                  <i className="fa fa-backward" />
+               </div>
             <div
              className='play-pause hover'
              onClick={this.props.handlePlayPause}

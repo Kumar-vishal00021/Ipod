@@ -5,16 +5,24 @@ import Games from "./screens/Games";
 import Settings from "./screens/Settings";
 import { screenIndexMapping } from "../constants";
 import CoverFlow from "./screens/CoverFlow";
+import Music from "./screens/Music";
 export default function Display(props) {
    const {
       curruntScreenIndex,
-      menuActiveIndex
+      menuActiveIndex,
+      songProgressRef ,
+      curruntSong,
+      curruntSongIndex,
    } = props;
-   if(curruntScreenIndex === screenIndexMapping.coreMenu){
+   if(curruntScreenIndex === screenIndexMapping.coreMenu) {
     return <CoreMenu menuActiveIndex= {menuActiveIndex} />;
    }
    if(curruntScreenIndex === screenIndexMapping.music){
-      return <div>Music</div>
+      return( <Music 
+            songProgressRef={songProgressRef} 
+            currentSong={curruntSong} 
+            curruntSongIndex ={curruntSongIndex}
+            />)
    }
    if(curruntScreenIndex === screenIndexMapping.games){
       return <Games />

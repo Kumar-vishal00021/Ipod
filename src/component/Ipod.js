@@ -11,16 +11,19 @@ export default class Ipod extends Component{
           curruntScreenIndex : 1,
           menuActiveIndex : 0,
           dormantScreenIndex : 1,
-          curruntSong : new Audio(songs.audio1),
+          curruntSongIndex:0,
+          curruntSong : new Audio(songs[0].audio),
           isSongPlaying: false,
         }
         this.controllerRef = React.createRef();
-        this.tempMenuIndexStore = React.createRef();
+        this.songProgressRef = React.createRef();
+        // this.tempMenuIndexStore = React.createRef();
     }
     componentDidMount(){
       const temp = this.controllerRef.current;
-      // console.log(temp);
+      // console.log(this.state.curruntSong);
       this.controllerRingElem = new zingtouch.Region(temp);
+      this.state.curruntSong.addEventListener("timeupdate", this.updateSongProgress)
     }
     rotate = () => {
       // this.tempMenuIndexStore = this.state.menuActiveIndex;
@@ -99,13 +102,72 @@ export default class Ipod extends Component{
       if(this.state.isSongPlaying) return true;
       else return false;
     }
+    updateSongProgress = () => {
+      if(this.state.curruntScreenIndex === screenIndexMapping.music){
+        let duration = this.state.curruntSong.duration;
+        let currentTime = this.state.curruntSong.currentTime;
+        // console.log("currunt" + currentTime + "duration" + duration)
+        const progressPercent = (currentTime/duration) * 100
+        console.log(`${(currentTime/duration) * 100}%`);
+        this.songProgressRef.current.style.width = progressPercent + "%"
+      }
+      else{
+        return;
+      }
+    }
+    handleNextSong = () => {
+      // Remove timeupdate listener from the current song
+      this.state.curruntSong.removeEventListener("timeupdate", this.updateSongProgress);
+    
+      // Move to the next song
+      const temp = (this.state.curruntSongIndex + 1) % Object.keys(songs).length;
+      const newSong = new Audio(songs[temp].audio);
+    
+      // Set the new song and add timeupdate listener
+      this.setState({ curruntSongIndex: temp, curruntSong: newSong }, () => {
+        this.state.curruntSong.addEventListener("timeupdate", this.updateSongProgress);
+        
+        // Play the song if it was already playing
+        if (this.state.isSongPlaying) {
+          this.state.curruntSong.play();
+        }
+      });
+    }
+    
+    handlePrevSong = () => {
+      // Remove timeupdate listener from the current song
+      this.state.curruntSong.removeEventListener("timeupdate", this.updateSongProgress);
+    
+      let temp;
+      if (this.state.curruntSongIndex === 0) {
+        temp = Object.keys(songs).length - 1;
+      } else {
+        temp = (this.state.curruntSongIndex - 1) % Object.keys(songs).length;
+      }
+      const newSong = new Audio(songs[temp].audio);
+    
+      // Set the new song and add timeupdate listener
+      this.setState({ curruntSongIndex: temp, curruntSong: newSong }, () => {
+        this.state.curruntSong.addEventListener("timeupdate", this.updateSongProgress);
+        
+        // Play the song if it was already playing
+        if (this.state.isSongPlaying) {
+          this.state.curruntSong.play();
+        }
+      });
+    }
     render(){
+      // console.log(this.state.curruntSongIndex)
         return(
            <div className="Ipod">
               <div className="Ipod-top">
                 <Display 
                   curruntScreenIndex = {this.state.curruntScreenIndex}
                   menuActiveIndex = {this.state.menuActiveIndex}
+                  songProgressRef = {this.songProgressRef}
+                  curruntSong = {this.state.curruntSong}
+                  curruntSongIndex = {this.state.curruntSongIndex}
+                  isSongPlaying = {this.handlePlayPauseIcon}
                 />
               </div>
               <div className="Ipod-bottom">
@@ -116,6 +178,8 @@ export default class Ipod extends Component{
                   handleMenuControllerClick = {this.handleMenuControllerClick}
                   handlePlayPause = {this.handlePlayPause}
                   isSongPlaying = {this.handlePlayPauseIcon}
+                  handleNextSong ={this.handleNextSong}
+                  handlePrevSong = {this.handlePrevSong}
                 />
               </div>
            </div>
