@@ -118,7 +118,10 @@ export default class Ipod extends Component{
     handleNextSong = () => {
       // Remove timeupdate listener from the current song
       this.state.curruntSong.removeEventListener("timeupdate", this.updateSongProgress);
-    
+      if(this.state.isSongPlaying){
+        this.setState({isSongPlaying:false})
+        this.state.curruntSong.pause();
+      }
       // Move to the next song
       const temp = (this.state.curruntSongIndex + 1) % Object.keys(songs).length;
       const newSong = new Audio(songs[temp].audio);
@@ -126,19 +129,20 @@ export default class Ipod extends Component{
       // Set the new song and add timeupdate listener
       this.setState({ curruntSongIndex: temp, curruntSong: newSong }, () => {
         this.state.curruntSong.addEventListener("timeupdate", this.updateSongProgress);
-        
-        // Play the song if it was already playing
-        if (this.state.isSongPlaying) {
-          this.state.curruntSong.play();
-        }
       });
+      if(this.state.isSongPlaying){
+        this.setState({isSongPlaying:false})
+      }
     }
     
     handlePrevSong = () => {
       // Remove timeupdate listener from the current song
       this.state.curruntSong.removeEventListener("timeupdate", this.updateSongProgress);
-    
       let temp;
+      if(this.state.isSongPlaying){
+        this.setState({isSongPlaying:false})
+        this.state.curruntSong.pause();
+      }
       if (this.state.curruntSongIndex === 0) {
         temp = Object.keys(songs).length - 1;
       } else {
@@ -149,12 +153,8 @@ export default class Ipod extends Component{
       // Set the new song and add timeupdate listener
       this.setState({ curruntSongIndex: temp, curruntSong: newSong }, () => {
         this.state.curruntSong.addEventListener("timeupdate", this.updateSongProgress);
-        
-        // Play the song if it was already playing
-        if (this.state.isSongPlaying) {
-          this.state.curruntSong.play();
-        }
       });
+      
     }
     render(){
       // console.log(this.state.curruntSongIndex)
